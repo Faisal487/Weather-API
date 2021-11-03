@@ -1,12 +1,16 @@
 require("dotenv").config();
+const path = require("path")
 const express = require("express");
 const https = require("https");
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+console.log(path.join(__dirname,"/public"));
+app.use(express.static(path.join(__dirname,"/public")))
 
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/index.html");
-});
+app.get("/", (req, res) => {
+  res.send("hello..")
+})
+
 app.post("/", function (req, res) {
   const query = req.body.cityName;
   const apiKey = process.env.KEY;
@@ -28,7 +32,7 @@ app.post("/", function (req, res) {
       const weatherDescription = weatherData.weather[0].description;
       const icon = weatherData.weather[0].icon;
       const imageUrl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
-      res.write("<p>The weather is currently " + weatherDescription + "<p>");
+      res.write("<p >The weather is currently " + weatherDescription + "<p>");
       res.write(
         "<h1>The temperature in " +
           query +
